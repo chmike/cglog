@@ -23,9 +23,9 @@ type Options struct {
 	VModule string `json:"vmodule,omitempty"`
 	// TraceLocation sets a backtrace logging when logging hits line file:N.
 	TraceLocation string
-	// LogDir sets the log output directory (default is /tmp).
+	// LogDir sets the log output directory (default is /tmp). Create the directory if it doesn’t exist.
 	LogDir string `json:"logdir,omitempty"`
-	// MaxSize is the maximum byte size of a log file triggering rotation (default: 10MB).
+	// MaxSize is the maximum byte size of a log file triggiring rotation (default: 10MB).
 	MaxSize int
 }
 ```
