@@ -25,7 +25,7 @@ type Options struct {
 	TraceLocation string
 	// LogDir sets the log output directory (default is /tmp).
 	LogDir string `json:"logdir,omitempty"`
-	// MaxSize is the maximum byte size of a log file triggiring rotation (default: 10MB).
+	// MaxSize is the maximum byte size of a log file triggering rotation (default: 10MB).
 	MaxSize int
 }
 ```
