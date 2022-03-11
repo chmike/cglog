@@ -35,34 +35,28 @@ var ErrAlreadyInitialized = errors.New("already initialized")
 // Init initializes glog with the given options. Don’t call any glog functions before
 // calling the glog.Init() function. Returns ErrAlreadyInitialized if called more than
 // once.
-func Init(options *Options) error {
+func Init(options Options) error {
 	if !atomic.CompareAndSwapUint32(&initOnce, 0, 1) {
 		return ErrAlreadyInitialized
 	}
-	logging.toStderr = false
-	logging.alsoToStderr = false
-	logging.verbosity = 0
-	logging.stderrThreshold = errorLog
-	logging.vmodule = moduleSpec{}
-	logging.traceLocation = traceLocation{}
-	if options != nil {
-		logging.toStderr = options.ToStdErr
-		logging.alsoToStderr = options.AlsoToStdErr
-		logDir = options.LogDir
+	logging.toStderr = options.ToStdErr
+	logging.alsoToStderr = options.AlsoToStdErr
+	logDir = options.LogDir
+	if options.Verbosity != "" {
 		if err := logging.verbosity.Set(options.Verbosity); err != nil {
 			return err
 		}
-		if options.StdErrThreshold != "" {
-			if err := logging.stderrThreshold.Set(options.StdErrThreshold); err != nil {
-				return err
-			}
-		}
-		if err := logging.vmodule.Set(options.VModule); err != nil {
+	}
+	if options.StdErrThreshold != "" {
+		if err := logging.stderrThreshold.Set(options.StdErrThreshold); err != nil {
 			return err
 		}
-		if err := logging.traceLocation.Set(options.TraceLocation); err != nil {
-			return err
-		}
+	}
+	if err := logging.vmodule.Set(options.VModule); err != nil {
+		return err
+	}
+	if err := logging.traceLocation.Set(options.TraceLocation); err != nil {
+		return err
 	}
 	logging.setVState(0, nil, false)
 	go logging.flushDaemon()
