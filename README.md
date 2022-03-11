@@ -39,6 +39,7 @@ It also returns an error if a parameter is invalid. If `Init` returns an
 error, the behavior of cglog is undefined. It is preferable to consider it
 a fatal error.
 
+Stardard log prints as info to stderr. 
 
 ----
 
