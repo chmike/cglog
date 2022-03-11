@@ -2,6 +2,7 @@ package cglog
 
 import (
 	"errors"
+	"strconv"
 	"sync/atomic"
 )
 
@@ -10,8 +11,8 @@ type Options struct {
 	ToStdErr bool `json:"toStdErr,omitempty"`
 	// AlsoToStdErr is true to log to stderr and to files.
 	AlsoToStdErr bool `json:"alsoToStdErr,omitempty"`
-	// Verbosity sets the log level for V logs (e.g. "3").
-	Verbosity string `json:"verbosity,omitempty"`
+	// Verbosity sets the log level for V logs (e.g. 3).
+	Verbosity int `json:"verbosity,omitempty"`
 	// StdErrThreshold set the stderr output threshold to "info", "warning", "error" or "fatal".
 	StdErrThreshold string `json:"stdErrThreshold,omitempty"`
 	// VModule sets the verbose level per file. V is comma-separated list of pattern=N settings for file-filtered logging.
@@ -21,6 +22,8 @@ type Options struct {
 	TraceLocation string
 	// LogDir sets the log output directory (default is /tmp).
 	LogDir string `json:"logdir,omitempty"`
+	// MaxSize is the maximum byte size of a log file triggiring rotation.
+	MaxSize int
 }
 
 // An Option is a function setting logginT options.
@@ -42,11 +45,10 @@ func Init(options Options) error {
 	logging.toStderr = options.ToStdErr
 	logging.alsoToStderr = options.AlsoToStdErr
 	logDir = options.LogDir
-	if options.Verbosity != "" {
-		if err := logging.verbosity.Set(options.Verbosity); err != nil {
-			return err
-		}
+	if err := logging.verbosity.Set(strconv.Itoa(options.Verbosity)); err != nil {
+		return err
 	}
+
 	if options.StdErrThreshold != "" {
 		if err := logging.stderrThreshold.Set(options.StdErrThreshold); err != nil {
 			return err
@@ -60,7 +62,11 @@ func Init(options Options) error {
 			return err
 		}
 	}
-	logging.setVState(0, nil, false)
+	if options.MaxSize != 0 {
+		MaxSize = uint64(options.MaxSize)
+	}
+	logging.setVState(logging.verbosity, nil, false)
+	CopyStandardLogTo("INFO")
 	go logging.flushDaemon()
 	return nil
 }
