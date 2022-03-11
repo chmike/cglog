@@ -55,8 +55,10 @@ func Init(options Options) error {
 	if err := logging.vmodule.Set(options.VModule); err != nil {
 		return err
 	}
-	if err := logging.traceLocation.Set(options.TraceLocation); err != nil {
-		return err
+	if options.TraceLocation != "" {
+		if err := logging.traceLocation.Set(options.TraceLocation); err != nil {
+			return err
+		}
 	}
 	logging.setVState(0, nil, false)
 	go logging.flushDaemon()
