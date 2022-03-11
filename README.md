@@ -16,7 +16,7 @@ type Options struct {
 	AlsoToStdErr bool `json:"alsoToStdErr,omitempty"`
 	// Verbosity sets the log level for V logs (e.g. 3).
 	Verbosity int `json:"verbosity,omitempty"`
-	// StdErrThreshold set the stderr output threshold to "info", "warning", "error" or "fatal".
+	// StdErrThreshold set the stderr output threshold to "info", "warning", "error" or "fatal" (default: error).
 	StdErrThreshold string `json:"stdErrThreshold,omitempty"`
 	// VModule sets the verbose level per file. V is comma-separated list of pattern=N settings for file-filtered logging.
 	// pattern may be a file name (without .go) or a file with wildcard (e.g. gtx*=2).
@@ -39,7 +39,10 @@ It also returns an error if a parameter is invalid. If `Init` returns an
 error, the behavior of cglog is undefined. It is preferable to consider it
 a fatal error.
 
-Stardard log prints as info to stderr. 
+Notes:
+
+1. Stardard log prints as info to stderr. 
+2. Doesn’t erase old log files.
 
 ----
 
