@@ -14,8 +14,8 @@ type Options struct {
 	ToStdErr bool `json:"toStdErr,omitempty"`
 	// AlsoToStdErr is true to log to stderr and to files.
 	AlsoToStdErr bool `json:"alsoToStdErr,omitempty"`
-	// Verbosity sets the log level for V logs (e.g. "3").
-	Verbosity string `json:"verbosity,omitempty"`
+	// Verbosity sets the log level for V logs (e.g. 3).
+	Verbosity int `json:"verbosity,omitempty"`
 	// StdErrThreshold set the stderr output threshold to "info", "warning", "error" or "fatal".
 	StdErrThreshold string `json:"stdErrThreshold,omitempty"`
 	// VModule sets the verbose level per file. V is comma-separated list of pattern=N settings for file-filtered logging.
@@ -25,6 +25,8 @@ type Options struct {
 	TraceLocation string
 	// LogDir sets the log output directory (default is /tmp).
 	LogDir string `json:"logdir,omitempty"`
+	// MaxSize is the maximum byte size of a log file triggiring rotation (default: 10MB).
+	MaxSize int
 }
 ```
 
