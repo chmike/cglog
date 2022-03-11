@@ -2,6 +2,7 @@ package cglog
 
 import (
 	"errors"
+	"os"
 	"strconv"
 	"sync/atomic"
 )
@@ -66,6 +67,11 @@ func Init(options Options) error {
 	}
 	if options.MaxSize != 0 {
 		MaxSize = uint64(options.MaxSize)
+	}
+	if options.LogDir != "" {
+		if err := os.MkdirAll(options.LogDir, 0755); err != nil {
+			return err
+		}
 	}
 	logging.setVState(logging.verbosity, nil, false)
 	CopyStandardLogTo("INFO")
