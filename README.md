@@ -8,7 +8,7 @@ command line arguments.
 
 The parameters are the following. 
 
-```Go
+```go
 type Options struct {
 	// ToStdErr is true to log to stderr instead of files.
 	ToStdErr bool `json:"toStdErr,omitempty"`
@@ -22,11 +22,11 @@ type Options struct {
 	// pattern may be a file name (without .go) or a file with wildcard (e.g. gtx*=2).
 	VModule string `json:"vmodule,omitempty"`
 	// TraceLocation sets a backtrace logging when logging hits line file:N.
-	TraceLocation string
+	TraceLocation string `json:"traceLocation,omitempty"`
 	// LogDir sets the log output directory (default is /tmp). Create the directory if it doesn’t exist.
-	LogDir string `json:"logdir,omitempty"`
+	LogDir string `json:"logdir"`
 	// MaxSize is the maximum byte size of a log file triggiring rotation (default: 10MB).
-	MaxSize int
+	MaxSize int `json:"maxLogFileLen,omitempty"`
 }
 ```
 
