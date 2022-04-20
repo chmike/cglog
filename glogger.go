@@ -1,8 +1,8 @@
 package cglog
 
 type Cglog struct {
-	tag       string
-	verbosity int
+	tag   string // tag to print in front of messages
+	level int    // debug level
 }
 
 // New returns a Cglog instance that will print the tag in front of the message.
@@ -11,13 +11,32 @@ func New(tag string) *Cglog {
 }
 
 // SetV set the verbosity of the Cglog.
-func (c *Cglog) SetV(verbosity int) {
-	c.verbosity = verbosity
+func (c *Cglog) SetDebug(level int) {
+	c.level = level
 }
 
-// V returns the verbosity.
-func (c *Cglog) V() int {
-	return c.verbosity
+// Debug logs to the INFO log.
+// Arguments are handled in the manner of fmt.Print; a newline is appended if missing.
+func (c *Cglog) Debug(level int, args ...interface{}) {
+	if c.level >= level {
+		logging.print(infoLog, append([]interface{}{c.tag}, args...))
+	}
+}
+
+// Debugln logs to the INFO log.
+// Arguments are handled in the manner of fmt.Println; a newline is appended if missing.
+func (c *Cglog) Debugln(level int, args ...interface{}) {
+	if c.level >= level {
+		logging.println(infoLog, append([]interface{}{c.tag}, args...))
+	}
+}
+
+// Debugf logs to the INFO log.
+// Arguments are handled in the manner of fmt.Printf; a newline is appended if missing.
+func (c *Cglog) Debugf(level int, format string, args ...interface{}) {
+	if c.level >= level {
+		logging.printf(infoLog, c.tag+format, args...)
+	}
 }
 
 // Info logs to the INFO log.
